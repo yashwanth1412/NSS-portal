@@ -1,20 +1,18 @@
 const {DataTypes, Model} = require("sequelize")
 const db_sequelize = require("../db.js")
+const Event = require("./event.js")
 
-class User extends Model {}
+class Category extends Model {}
 
-User.init({
+Category.init({
   // Model attributes are defined here
-    name: {
-        type: DataTypes.STRING,
+    number: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
         allowNull: false
     },
-    rollno: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    email: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
@@ -22,8 +20,10 @@ User.init({
 }, {
     // Other model options go here
     sequelize: db_sequelize, 
-    modelName: 'User',
+    modelName: 'Category',
     freezeTableName: true
 });
 
-module.exports = User
+Category.hasMany(Event, {foreignKey: 'fk_category', targetKey: 'number'})
+
+module.exports = Category

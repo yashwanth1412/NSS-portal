@@ -5,7 +5,10 @@ const mysql = require("mysql")
 const app = express();
 
 const User = require("./models/user.js")
-const db_sequelize = require("./db.js")
+const Event = require("./models/event.js")
+const User_Events = require("./models/user_events.js")
+const db_sequelize = require("./db.js");
+const Category = require('./models/category.js');
 
 db_sequelize
   .authenticate()
@@ -16,13 +19,11 @@ db_sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-User.sync({alter:true}).then(() => {
-  return User.create({
-    name: 'Yash',
-    rollno: 'CS19B1030',
-    email : 'cs19b1030@iiitr.ac.in'
-  });
-});
+async function test(){
+  await db_sequelize.sync()
+}
+
+test()
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));

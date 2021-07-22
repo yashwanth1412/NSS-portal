@@ -1,29 +1,31 @@
 const {DataTypes, Model} = require("sequelize")
 const db_sequelize = require("../db.js")
 
-class User extends Model {}
+class Event extends Model {}
 
-User.init({
+Event.init({
   // Model attributes are defined here
-    name: {
-        type: DataTypes.STRING,
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
         allowNull: false
     },
-    rollno: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true
+        primaryKey: true
     },
-    email: {
-        type: DataTypes.STRING,
+    date: {
+        type: DataTypes.DATEONLY,
         allowNull: false,
         primaryKey: true
     }
 }, {
     // Other model options go here
     sequelize: db_sequelize, 
-    modelName: 'User',
+    modelName: 'Event',
     freezeTableName: true
 });
 
-module.exports = User
+module.exports = Event
