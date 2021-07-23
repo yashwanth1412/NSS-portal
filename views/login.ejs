@@ -1,0 +1,31 @@
+<!Doctype htm1>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/home-styles.css">
+        <title>Home</title>
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <form action="/login" method="POST">
+                    <div>
+                        <label>Email</label>
+                        <input type="text" name="username" required autofocus>
+                    </div>
+                    <div>
+                        <label>Password</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <div class="login-btns">
+                        <button type="submit">Login</button>
+                        <button><a href="/register">Register</a></button>
+                    </div>
+                </form>
+                <a href="/auth/google" role='button'>
+                    <img src="images/google-sign-btn.png" alt="Google sign in">
+                </a>
+            </div>
+        </div>  
+    </body>
+</html>

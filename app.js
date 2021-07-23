@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 
 const User = require("./models/user.js")
@@ -8,6 +10,54 @@ const Event = require("./models/event.js")
 const User_Events = require("./models/user_events.js")
 const db_sequelize = require("./db.js");
 const Category = require('./models/category.js');
+
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(express.static("public"));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(email, done) {
+  console.log(email)
+  user = User.findByPk(email)
+  if(user)
+    done(null, user)
+  else
+    done
+});
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/google/index",
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+  },
+  async function(accessToken, refreshToken, profile, done) {
+    try{
+      user = await User.findOrCreate({
+        where: {
+          email: profile.emails[0].value
+        },
+        defaults: {
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          rollno: profile.emails[0].value.slice(0, 9)
+        }
+      })
+      done(null, user)
+    }
+    catch{
+      err = new Error()
+      done(err, false)
+    }
+  }
+));
 
 db_sequelize
   .authenticate()
@@ -18,20 +68,46 @@ db_sequelize
     console.error('Unable to connect to the database:', err);
   });
 
+app.get("/auth/google",
+  passport.authenticate("google", { scope: [ "email", "profile"]}
+));
+
+app.get("/auth/google/index",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function(req, res) {
+    // Successful authentication, redirect secrets.
+    res.redirect('/');
+});
+
 async function test(){
   await db_sequelize.sync()
 }
 
 test()
 
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
-app.use(express.static("public"));
-
 app.get("/", (req, res)=> {
+  if(req.isAuthenticated()){
     res.send("<h1>Hello<h1>")
+  }
+  else{
+    res.redirect("/login")
+  }
 })
+
+app.get("/login", (req, res) => {
+  if(req.isAuthenticated()){
+    res.redirect("/")
+  }
+  else{
+    res.render("login")
+  }
+})
+
+app.get('/logout', function(req, res){
+  console.log('logging out');
+  req.logout();
+  res.redirect('/login'); 
+});
 
 
 module.exports = app
