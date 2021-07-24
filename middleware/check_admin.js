@@ -1,5 +1,3 @@
-const User = require("../models/user.js")
-
 function check_admin(req, res, next){
     if(!req.isAuthenticated())
         return res.redirect("/login")

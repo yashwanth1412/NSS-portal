@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const session = require("express-session");
+const path = require('path')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 
@@ -17,7 +18,7 @@ const Category = require('./models/category.js');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+express.static(path.join(__dirname, 'public'));
 
 app.use(session({
   secret: "Our little message.",
