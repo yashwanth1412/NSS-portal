@@ -48,6 +48,7 @@ passport.use(new GoogleStrategy({
   },
   async function(accessToken, refreshToken, profile, done) {
     try{
+      var index = profile.emails[0].value.indexOf('@');
       user = await User.findOrCreate({
         where: {
           email: profile.emails[0].value
@@ -55,7 +56,7 @@ passport.use(new GoogleStrategy({
         defaults: {
           name: profile.displayName,
           email: profile.emails[0].value,
-          rollno: profile.emails[0].value.slice(0, 9)
+          rollno: profile.emails[0].value.slice(0, index)
         }
       })
       done(null, user)
@@ -113,7 +114,7 @@ app.get("/login", (req, res) => {
 app.get('/logout', function(req, res){
   console.log('logging out');
   req.logout();
-  res.redirect('/login'); 
+  res.redirect('/login');
 });
 
 
