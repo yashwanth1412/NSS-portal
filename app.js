@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+const session = require("express-session");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 
@@ -16,6 +17,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
+app.use(session({
+  secret: "Our little message.",
+  resave: false,
+  saveUninitialized: false
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -23,11 +30,12 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(email, done) {
-  console.log(email)
-  user = User.findByPk(email)
-  if(user)
-    done(null, user)
+passport.deserializeUser(async function(user, done) {
+  console.log("hi")
+  email = user[0].email
+  u = await User.findByPk(email)
+  if(u)
+    done(null, u)
   else
     done
 });
@@ -75,7 +83,6 @@ app.get("/auth/google",
 app.get("/auth/google/index",
   passport.authenticate("google", { failureRedirect: "/login" }),
   function(req, res) {
-    // Successful authentication, redirect secrets.
     res.redirect('/');
 });
 
