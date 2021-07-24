@@ -6,6 +6,8 @@ const session = require("express-session");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 
+const AdminRouter = require("./admin.js")
+
 const User = require("./models/user.js")
 const Event = require("./models/event.js")
 const User_Events = require("./models/user_events.js")
@@ -31,7 +33,6 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(async function(user, done) {
-  console.log("hi")
   email = user[0].email
   u = await User.findByPk(email)
   if(u)
@@ -60,8 +61,7 @@ passport.use(new GoogleStrategy({
       })
       done(null, user)
     }
-    catch{
-      err = new Error()
+    catch(err){
       done(err, false)
     }
   }
@@ -92,6 +92,8 @@ async function test(){
 
 test()
 
+app.use("/admin", AdminRouter)
+
 app.get("/", (req, res)=> {
   if(req.isAuthenticated()){
     res.send("<h1>Hello<h1>")
@@ -115,6 +117,22 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/login'); 
 });
+
+app.use((req, res, next)=>{
+	const err = new Error("not found")
+	err.status = 404
+	next(err)
+})
+
+app.use((error, req, res, next)=>{
+	res.status(error.status || 500)
+	res.json({
+		error: {
+			message: error.message
+		}
+	})
+})
+
 
 
 module.exports = app
