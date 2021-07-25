@@ -7,16 +7,20 @@ class User_Events extends Model {}
 
 User_Events.init({
     UserEmail: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true,
         references: {
-            model: User, 
+            model: User,
             key: 'email'
         }
     },
     EventId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
         references: {
-            model: Event, 
+            model: Event,
             key: 'id'
         }
     },
@@ -25,13 +29,19 @@ User_Events.init({
         defaultValue: 0
     }
 }, {
-    sequelize: db_sequelize, 
+    sequelize: db_sequelize,
     modelName: 'Participate',
     freezeTableName: true
 });
 
+Event.hasMany(User_Events);
+User_Events.belongsTo(Event);
 
-Event.belongsToMany(User, { through: User_Events });
-User.belongsToMany(Event, { through: User_Events });
+User.hasMany(User_Events);
+User_Events.belongsTo(User);
+
+
+//Event.belongsToMany(User, { through: User_Events });
+//User.belongsToMany(Event, { through: User_Events });
 
 module.exports = User_Events

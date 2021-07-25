@@ -93,9 +93,35 @@ async function test(){
 
 test()
 
-app.get("/", (req, res)=> {
+app.get("/", async(req, res)=> {
   if(req.isAuthenticated()){
-    res.send("<h1>Hello<h1>")
+    try {
+      var array = []
+      var a = await User_Events.findAll({
+        where: {
+          UserEmail: req.user.email
+        },
+        include: Event
+      }).then(userEvents => {
+        return userEvents.map(events => {
+          return {...events.Event.dataValues, ...events.dataValues};
+        })
+      }).catch(err => console.log('error: ' + err));
+    } catch {
+      err = new Error()
+      done(err, false)
+    }
+
+    var b = a.map(entry => {
+      return {
+        "date" : entry.date,
+        "name" : entry.name,
+        "hrs" : entry.hours,
+        "category" : entry.fk_category
+      }
+    });
+
+    res.render("index", {list: b});
   }
   else{
     res.redirect("/login")
