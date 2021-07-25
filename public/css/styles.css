@@ -8,19 +8,20 @@ body {
 }
 
 .navbar {
-  padding: 1.5rem;
-  background-color: blue;
+  padding: 0.5rem;
+  background-color: #125d98;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
 .navbar h2 {
-  color: red;
+  color: #fff5fd;
+  letter-spacing: 0.5px;
 }
 
 img {
-  width: 5%;
+  width: 3%;
 }
 
 .heading {
@@ -65,6 +66,16 @@ td {
 
 tr:hover {
   background-color: #f5f5f5;
+}
+
+.footer {
+  padding: 5rem 3rem;
+  background-color: #125d98;
+}
+
+.footer div {
+  color: white;
+  text-align: center;
 }
 
 @media screen and (max-width: 970px) {
@@ -162,22 +173,15 @@ tr:hover {
 
 @media screen and (max-width: 681px) {
   td {
-    padding-left: 13rem;
+    padding-left: 12rem;
   }
 
   .profile {
     flex-direction: column;
     align-items: center;
   }
-}
 
-.footer {
-  padding: 4rem;
-  background-color: antiquewhite;
-}
-
-.footer div {
-  margin: auto;
-  width: 50%;
-  text-align: center;
+  .footer {
+    padding: 2.5rem;
+  }
 }
