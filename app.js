@@ -3,8 +3,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const session = require("express-session");
+const path = require('path')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
+
+const AdminRouter = require("./admin.js")
 
 const User = require("./models/user.js")
 const Event = require("./models/event.js")
@@ -15,7 +18,7 @@ const Category = require('./models/category.js');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+express.static(path.join(__dirname, 'public'));
 
 app.use(session({
   secret: "Our little message.",
@@ -31,7 +34,6 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(async function(user, done) {
-  console.log("hi")
   email = user[0].email
   u = await User.findByPk(email)
   if(u)
@@ -61,8 +63,7 @@ passport.use(new GoogleStrategy({
       })
       done(null, user)
     }
-    catch{
-      err = new Error()
+    catch(err){
       done(err, false)
     }
   }
@@ -93,7 +94,13 @@ async function test(){
 
 test()
 
+<<<<<<< HEAD
 app.get("/", async(req, res)=> {
+=======
+app.use("/admin", AdminRouter)
+
+app.get("/", (req, res)=> {
+>>>>>>> ff3e9759144b2552e230ed2b0116cf06aa1ee13d
   if(req.isAuthenticated()){
     try {
       var array = []
@@ -142,6 +149,22 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/login');
 });
+
+app.use((req, res, next)=>{
+	const err = new Error("not found")
+	err.status = 404
+	next(err)
+})
+
+app.use((error, req, res, next)=>{
+	res.status(error.status || 500)
+	res.json({
+		error: {
+			message: error.message
+		}
+	})
+})
+
 
 
 module.exports = app
