@@ -28,16 +28,19 @@ router.post("/", upload.single("fileName"), async(req, res, next) => {
         let path = __dirname + "/records/" + req.file.filename;
         let csvData = [];
 
-        fs.createReadStream(path)
+        var parser = fs.createReadStream(path)
         .pipe(csv.parse({ headers: true }))
         .on("error", (error) => {
           throw error;
         })
         .on("data", (row) => {
+          parser.pause();
           csvData.push(row);
+          console.log(row)
+          
+          parser.resume();
         })
         .on("end", () => {
-          console.log(csvData)
           res.send(csvData)
         });
       } 
@@ -49,3 +52,14 @@ router.post("/", upload.single("fileName"), async(req, res, next) => {
 
 module.exports = router
 
+// Event.create({
+//   name: req.params.event,
+//   date: new Date(),
+//   fk_category: 1
+//   })
+
+// await User_Events.create({
+// UserEmail: req.user.email,
+// EventId: e.id,
+// hours: 5
+// })
