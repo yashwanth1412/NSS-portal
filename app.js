@@ -114,6 +114,24 @@ app.get("/", async(req, res)=> {
       done(err, false)
     }
 
+    try {
+      var cats = await Category.findAll()
+      cats = cats.map(cat => {
+        return {...cat.dataValues};
+      })
+    } catch {
+      err = new Error()
+      done(err, false)
+    }
+
+    var sample = {};
+    cats.forEach((cat, i) => {
+        sample[cat.number] = {
+          minhrs: cat.minHrs,
+          hrs: 0
+        }
+    });
+
     var b = a.map(entry => {
       return {
         "date" : entry.date,
@@ -122,8 +140,20 @@ app.get("/", async(req, res)=> {
         "category" : entry.fk_category
       }
     });
+    var agg_hrs = 0;
+    a.forEach((data, i) => {
+      agg_hrs += data.hours;
+      sample[data.fk_category].hrs += data.hours;
+    });
 
-    res.render("index", {list: b});
+
+    var info = {
+      "name" : req.user.name,
+      "mail" : req.user.email,
+      "hrs" : agg_hrs
+    };
+
+    res.render("index", {list: b, info: info, cwhrs: sample});
   }
   else{
     res.redirect("/login")

@@ -25,7 +25,14 @@
       />
     </div>
     <div class="content">
+      <div class="heading"><h3>Your Contribution to NSS</h3></div>
+      <div class="profile">
+        <div>Name: <%= info.name %></div>
+        <div>Mail: <%= info.mail %></div>
+      </div>
+      <div class="heading">Total Hours Completed: <%= info.hrs %> Hours</div>
       <div class="table-wrapper">
+        <h3>Events Attended</h3>
         <table class="table">
           <tbody>
             <tr>
@@ -40,6 +47,24 @@
                 <td><%= list[i].name %></td>
                 <td><%= list[i].hrs %></td>
                 <td><%= list[i].category %></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+        <h3 class="cat">Category-wise Hours</h3>
+
+        <table class="category table">
+          <tbody>
+            <tr>
+              <th>Category</th>
+              <th>Minimum Hours</th>
+              <th>Hours Allotted</th>
+            </tr>
+            <% for(const [key, value] of Object.entries(cwhrs)){ %>
+              <tr>
+                <td><%= key %></td>
+                <td><%= value.minhrs %></td>
+                <td><%= value.hrs %></td>
               </tr>
             <% } %>
           </tbody>

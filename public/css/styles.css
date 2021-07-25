@@ -23,6 +23,33 @@ img {
   width: 5%;
 }
 
+.heading {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.profile {
+  /*padding: 1rem;*/
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.profile div {
+  padding: 0.5rem;
+}
+
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cat {
+  padding: 1.5rem;
+}
+
 table {
   border-collapse: collapse;
   width: 80%;
@@ -121,11 +148,26 @@ tr:hover {
   td:nth-of-type(4):before {
     content: "Category";
   }
+
+  .category td:nth-of-type(1):before {
+    content: "Category";
+  }
+  .category td:nth-of-type(2):before {
+    content: "Minimum Hours";
+  }
+  .category td:nth-of-type(3):before {
+    content: "Hours Allotted";
+  }
 }
 
 @media screen and (max-width: 681px) {
   td {
     padding-left: 13rem;
+  }
+
+  .profile {
+    flex-direction: column;
+    align-items: center;
   }
 }
 

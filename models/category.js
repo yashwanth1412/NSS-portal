@@ -12,14 +12,14 @@ Category.init({
         autoIncrement: true,
         allowNull: false
     },
-    name: {
-        type: DataTypes.STRING,
+    minHrs: {
+        type: DataTypes.DOUBLE,
         allowNull: false,
-        primaryKey: true
+        defaultValue: 0
     }
 }, {
     // Other model options go here
-    sequelize: db_sequelize, 
+    sequelize: db_sequelize,
     modelName: 'Category',
     freezeTableName: true
 });
