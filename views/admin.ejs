@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>CSV</title>
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/admin-styles.css" />
+    <title>NSS Admin Portal</title>
+  </head>
+  <body>
+    <form action="">
+      <div>
+        <label for="">Event Name: </label> <input type="text" name="event" />
+      </div>
 
-<p>Click on the "Choose File" button to upload a file:</p>
-
-<form class="my-form" action="/admin" method = "POST" enctype="multipart/form-data">
-
-  <input type="file"  id="myFile" accept = ".csv"  name="fileName" >
-
-  <input  class="button" type="submit">
-</form>
-</body>
+      <div><label for="">Date: </label> <input type="date" name="date" /></div>
+      <div>
+        <label for="category">Category:</label>
+        <select name="dropdown">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+      <div>
+        <label for="">Choose file: </label>
+        <input type="file" name="file" />
+      </div>
+      <div><input type="submit" /></div>
+    </form>
+  </body>
 </html>
