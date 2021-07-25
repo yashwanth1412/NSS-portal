@@ -35,6 +35,7 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(async function(user, done) {
   email = user[0].email
+  await db_sequelize.sync()
   u = await User.findByPk(email)
   if(u)
     done(null, u)
@@ -51,6 +52,7 @@ passport.use(new GoogleStrategy({
   async function(accessToken, refreshToken, profile, done) {
     try{
       var index = profile.emails[0].value.indexOf('@');
+      await db_sequelize.sync()
       user = await User.findOrCreate({
         where: {
           email: profile.emails[0].value
@@ -88,18 +90,12 @@ app.get("/auth/google/index",
     res.redirect('/');
 });
 
-async function test(){
-  await db_sequelize.sync()
-}
-
-test()
-
 app.use("/admin", AdminRouter)
 
 app.get("/", async(req, res)=> {
   if(req.isAuthenticated()){
     try {
-      var array = []
+      await db_sequelize.sync()
       var a = await User_Events.findAll({
         where: {
           UserEmail: req.user.email
@@ -109,8 +105,7 @@ app.get("/", async(req, res)=> {
       a = a.map(events => {
         return {...events.Event.dataValues, ...events.dataValues};
       })
-    } catch {
-      err = new Error()
+    } catch(err) {
       done(err, false)
     }
 

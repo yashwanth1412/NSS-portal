@@ -19,33 +19,51 @@ router.get("/", (req, res) => {
 })
 
 router.post("/", upload.single("fileName"), async(req, res, next) => {
-    try {
-        if (req.file == undefined) {
-          let err = new Error("Please upload a csv file");
-          throw err;
-        }
-        
-        let path = __dirname + "/records/" + req.file.filename;
-        let csvData = [];
+  try {
+    if (req.file == undefined) {
+      let err = new Error("Please upload a csv file");
+      throw err;
+    }
 
-        fs.createReadStream(path)
-        .pipe(csv.parse({ headers: true }))
-        .on("error", (error) => {
-          throw error;
-        })
-        .on("data", (row) => {
-          csvData.push(row);
-        })
-        .on("end", () => {
-          console.log(csvData)
-          res.send(csvData)
-        });
-      } 
-      catch (err) {
+    var event = await Event.create({
+      name: req.body.event,
+      date: new Date(req.body.date),
+      fk_category: req.body.dropdown
+    })
+    
+    let path = __dirname + "/records/" + req.file.filename;
+    let csvData = [];
+
+    var parser = await fs.createReadStream(path)
+    .pipe(csv.parse({ headers: true }))
+    .on("error", (error) => {
+      throw error;
+    })
+    .on("data", async(row) => {
+      parser.pause();
+      
+      User_Events.create({
+        UserEmail: row.email,
+        EventId: event.id,
+        hours: row.hours
+      }).then(user => {
+        console.log("uploaded")
+      }).catch(err => {
+        console.log(err)
         next(err)
-      }
+      })
+
+      parser.resume();
+    })
+    .on("end", () => {
+      console.log("Done")
+    });
+    res.redirect('/admin')
+  } 
+  catch (err) {
+    next(err)
+  }
       
 })
 
 module.exports = router
-
