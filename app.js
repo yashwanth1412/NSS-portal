@@ -94,11 +94,41 @@ async function test(){
 
 test()
 
+<<<<<<< HEAD
+app.get("/", async(req, res)=> {
+=======
 app.use("/admin", AdminRouter)
 
 app.get("/", (req, res)=> {
+>>>>>>> ff3e9759144b2552e230ed2b0116cf06aa1ee13d
   if(req.isAuthenticated()){
-    res.send("<h1>Hello<h1>")
+    try {
+      var array = []
+      var a = await User_Events.findAll({
+        where: {
+          UserEmail: req.user.email
+        },
+        include: Event
+      }).then(userEvents => {
+        return userEvents.map(events => {
+          return {...events.Event.dataValues, ...events.dataValues};
+        })
+      }).catch(err => console.log('error: ' + err));
+    } catch {
+      err = new Error()
+      done(err, false)
+    }
+
+    var b = a.map(entry => {
+      return {
+        "date" : entry.date,
+        "name" : entry.name,
+        "hrs" : entry.hours,
+        "category" : entry.fk_category
+      }
+    });
+
+    res.render("index", {list: b});
   }
   else{
     res.redirect("/login")

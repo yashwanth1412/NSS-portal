@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="shortcut icon"
+      href="https://www.nicepng.com/png/full/944-9446351_the-symbol-for-the-nss-has-been-based.png"
+      type="image/x-icon"
+    />
+    <title>NSS Portal</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="navbar">
+      <img
+        src="https://www.nicepng.com/png/full/944-9446351_the-symbol-for-the-nss-has-been-based.png"
+        alt="NSS logo"
+      />
+      <div><h2>NSS Hours Portal</h2></div>
+      <img
+        src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d8/Indian_Institute_of_Information_Technology%2C_Raichur_Logo.svg/1200px-Indian_Institute_of_Information_Technology%2C_Raichur_Logo.svg.png"
+        alt="IIIT Raichur logo"
+      />
+    </div>
+    <div class="content">
+      <div class="table-wrapper">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Event Date</th>
+              <th>Event Name</th>
+              <th>Hours Awarded</th>
+              <th>Category</th>
+            </tr>
+            <% for(var i=0; i<list.length; i++){ %>
+              <tr>
+                <td><%= list[i].date %></td>
+                <td><%= list[i].name %></td>
+                <td><%= list[i].hrs %></td>
+                <td><%= list[i].category %></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="footer">
+      <div>©Copyright NSS IIITR 2021</div>
+    </div>
+  </body>
+</html>
