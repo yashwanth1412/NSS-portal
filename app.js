@@ -18,7 +18,7 @@ const Category = require('./models/category.js');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-express.static(path.join(__dirname, 'public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   secret: "Our little message.",
@@ -94,13 +94,9 @@ async function test(){
 
 test()
 
-<<<<<<< HEAD
-app.get("/", async(req, res)=> {
-=======
 app.use("/admin", AdminRouter)
 
-app.get("/", (req, res)=> {
->>>>>>> ff3e9759144b2552e230ed2b0116cf06aa1ee13d
+app.get("/", async(req, res)=> {
   if(req.isAuthenticated()){
     try {
       var array = []
@@ -109,11 +105,10 @@ app.get("/", (req, res)=> {
           UserEmail: req.user.email
         },
         include: Event
-      }).then(userEvents => {
-        return userEvents.map(events => {
-          return {...events.Event.dataValues, ...events.dataValues};
-        })
-      }).catch(err => console.log('error: ' + err));
+      })
+      a = a.map(events => {
+        return {...events.Event.dataValues, ...events.dataValues};
+      })
     } catch {
       err = new Error()
       done(err, false)
