@@ -40,7 +40,7 @@ passport.deserializeUser(async function(user, done) {
   if(u)
     done(null, u)
   else
-    done
+    done(null, false)
 });
 
 passport.use(new GoogleStrategy({
@@ -93,66 +93,67 @@ app.get("/auth/google/index",
 app.use("/admin", AdminRouter)
 
 app.get("/", async(req, res)=> {
-  if(req.isAuthenticated()){
-    try {
-      await db_sequelize.sync()
-      var a = await User_Events.findAll({
-        where: {
-          UserEmail: req.user.email
-        },
-        include: Event
-      })
-      a = a.map(events => {
-        return {...events.Event.dataValues, ...events.dataValues};
-      })
-    } catch(err) {
-      done(err, false)
-    }
+  if(!req.isAuthenticated()){
+    return res.redirect("/login")
+  }
+  if(req.user.email == process.env.Admin){
+    return res.redirect("/admin")
+  }
+  try {
+    await db_sequelize.sync()
+    var a = await User_Events.findAll({
+      where: {
+        UserEmail: req.user.email
+      },
+      include: Event
+    })
+    a = a.map(events => {
+      return {...events.Event.dataValues, ...events.dataValues};
+    })
+  } catch(err) {
+    done(err, false)
+  }
 
-    try {
-      var cats = await Category.findAll()
-      cats = cats.map(cat => {
-        return {...cat.dataValues};
-      })
-    } catch {
-      err = new Error()
-      done(err, false)
-    }
+  try {
+    var cats = await Category.findAll()
+    cats = cats.map(cat => {
+      return {...cat.dataValues};
+    })
+  } catch {
+    err = new Error()
+    done(err, false)
+  }
 
-    var sample = {};
-    cats.forEach((cat, i) => {
-        sample[cat.number] = {
-          minhrs: cat.minHrs,
-          hrs: 0
-        }
-    });
-
-    var b = a.map(entry => {
-      return {
-        "date" : entry.date,
-        "name" : entry.name,
-        "hrs" : entry.hours,
-        "category" : entry.fk_category
+  var sample = {};
+  cats.forEach((cat, i) => {
+      sample[cat.number] = {
+        minhrs: cat.minHrs,
+        hrs: 0
       }
-    });
-    var agg_hrs = 0;
-    a.forEach((data, i) => {
-      agg_hrs += data.hours;
-      sample[data.fk_category].hrs += data.hours;
-    });
+  });
+
+  var b = a.map(entry => {
+    return {
+      "date" : entry.date,
+      "name" : entry.name,
+      "hrs" : entry.hours,
+      "category" : entry.fk_category
+    }
+  });
+  var agg_hrs = 0;
+  a.forEach((data, i) => {
+    agg_hrs += data.hours;
+    sample[data.fk_category].hrs += data.hours;
+  });
 
 
-    var info = {
-      "name" : req.user.name,
-      "mail" : req.user.email,
-      "hrs" : agg_hrs
-    };
+  var info = {
+    "name" : req.user.name,
+    "mail" : req.user.email,
+    "hrs" : agg_hrs
+  };
 
-    res.render("index", {list: b, info: info, cwhrs: sample});
-  }
-  else{
-    res.redirect("/login")
-  }
+  res.render("index", {list: b, info: info, cwhrs: sample});
 })
 
 app.get("/login", (req, res) => {
