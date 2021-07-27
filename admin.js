@@ -8,14 +8,14 @@ const User_Events = require("./models/user_events.js")
 const Category = require('./models/category.js');
 
 const check_admin = require("./middleware/check_admin.js");
-const upload = require("./middleware/file_upload.js")
+const upload = require("./middleware/file_upload.js");
 
 router = express.Router()
 
 router.use(check_admin)
 
 router.get("/", (req, res) => {
-    res.render("admin")
+  res.render("admin-page/add_event")
 })
 
 router.post("/", upload.single("fileName"), async(req, res, next) => {

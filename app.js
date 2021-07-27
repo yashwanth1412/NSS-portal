@@ -96,9 +96,6 @@ app.get("/", async(req, res)=> {
   if(!req.isAuthenticated()){
     return res.redirect("/login")
   }
-  if(req.user.email == process.env.Admin){
-    return res.redirect("/admin")
-  }
   try {
     await db_sequelize.sync()
     var a = await User_Events.findAll({
