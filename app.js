@@ -7,13 +7,11 @@ const path = require('path')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
 
-const AdminRouter = require("./admin.js")
+const UserRouter = require("./routes/user.js")
+const AdminRouter = require("./routes/admin.js")
 
 const User = require("./models/user.js")
-const Event = require("./models/event.js")
-const User_Events = require("./models/user_events.js")
 const db_sequelize = require("./db.js");
-const Category = require('./models/category.js');
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
@@ -90,70 +88,6 @@ app.get("/auth/google/index",
     res.redirect('/');
 });
 
-app.use("/admin", AdminRouter)
-
-app.get("/", async(req, res, next)=> {
-  if(!req.isAuthenticated()){
-    return res.redirect("/login")
-  }
-  try {
-    await db_sequelize.sync()
-    var a = await User_Events.findAll({
-      where: {
-        UserEmail: req.user.email
-      },
-      include: Event
-    })
-    a = a.map(events => {
-      return {...events.Event.dataValues, ...events.dataValues};
-    })
-  } catch(err) {
-    next(err)
-  }
-
-  try {
-    var cats = await Category.findAll()
-    cats = cats.map(cat => {
-      return {...cat.dataValues};
-    })
-  } catch {
-    err = new Error()
-    next(err)
-  }
-
-  var sample = {};
-  cats.forEach((cat, i) => {
-      sample[cat.number] = {
-        minhrs: cat.minHrs,
-        hrs: 0
-      }
-  });
-
-  var b = a.map(entry => {
-    return {
-      "date" : entry.date,
-      "name" : entry.name,
-      "hrs" : entry.hours,
-      "category" : entry.fk_category
-    }
-  });
-  
-  var agg_hrs = 0;
-  a.forEach((data, i) => {
-    agg_hrs += data.hours;
-    sample[data.fk_category].hrs += data.hours;
-  });
-
-
-  var info = {
-    "name" : req.user.name,
-    "mail" : req.user.email,
-    "hrs" : agg_hrs
-  };
-
-  res.render("index", {list: b, info: info, cwhrs: sample});
-})
-
 app.get("/login", (req, res) => {
   if(req.isAuthenticated()){
     res.redirect("/")
@@ -168,6 +102,13 @@ app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/login');
 });
+
+
+
+app.use("/admin", AdminRouter)
+app.use("/", UserRouter)
+
+
 
 app.use((req, res, next)=>{
 	const err = new Error("not found")

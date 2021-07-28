@@ -1,7 +1,6 @@
 <%- include('header') -%>
-  <link rel="stylesheet" href="/css/styles.css" />
-
-  <form id="form">
+<link rel="stylesheet" href="/css/styles.css" />
+  <form id="form" class="event_form">
     <div class="form-group">
         <label class="form-label">Roll No: </label> 
         <input type="text" name="rollno" class="form-control" required>
@@ -21,7 +20,7 @@
           
           $.ajax({
               method : "POST",
-              url : "/admin/change",
+              url : "/admin/user_search",
               data: $("#form").serialize(),
               dataType: 'html',
               error: err => {

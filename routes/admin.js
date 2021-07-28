@@ -2,13 +2,13 @@ const express = require("express");
 const fs = require("fs")
 const csv = require("fast-csv");
 
-const User = require("./models/user.js")
-const Event = require("./models/event.js")
-const User_Events = require("./models/user_events.js")
-const Category = require('./models/category.js');
+const User = require("../models/user.js")
+const Event = require("../models/event.js")
+const User_Events = require("../models/user_events.js")
+const Category = require('../models/category.js');
 
-const check_admin = require("./middleware/check_admin.js");
-const upload = require("./middleware/file_upload.js");
+const check_admin = require("../middleware/check_admin.js");
+const upload = require("../middleware/file_upload.js");
 
 router = express.Router()
 
@@ -136,11 +136,11 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
   } 
 })
 
-router.get("/change", async(req, res) => {
+router.get("/user_search", async(req, res) => {
   res.render("admin-page/user_hrs-change")
 })
 
-router.post('/change', async(req, res, next) => {
+router.post('/user_search', async(req, res, next) => {
   try {
     var user = await User.findOne({
       where: {
@@ -210,7 +210,7 @@ router.post("/update_hrs", async(req, res) => {
   catch{
 
   }
-  res.redirect("/admin/change")
+  res.redirect("/admin/user_search")
 })
 
 module.exports = router

@@ -24,7 +24,7 @@
                     </form>
                     <%= list[i].name %>
                 </td>
-                <td><input form="form<%= i %>" type="number" name="hours" value="<%= list[i].hrs %>"/></td>
+                <td><input form="form<%= i %>" type="number" name="hours" min="0" value="<%= list[i].hrs %>"/></td>
                 <td><%= list[i].category %></td>
                 <td><input form="form<%= i %>" type="submit" value="Save" class="btn btn-dark"/></td>
             </tr>

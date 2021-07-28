@@ -66,6 +66,10 @@
   align-items: center;
 }
 
+.event_form{
+  padding: 3%;
+}
+
 @media screen and (max-width: 500px) {
   img {
     height: 15;
