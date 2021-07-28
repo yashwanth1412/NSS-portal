@@ -100,6 +100,8 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
     
     let path = __dirname + "/records/" + req.file.filename;
 
+    console.log(path)
+
     var parser = await fs.createReadStream(path)
     .pipe(csv.parse({ headers: true }))
     .on("error", (error) => {
@@ -107,13 +109,12 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
     })
     .on("data", async(row) => {
       parser.pause();
-
       User.findOrCreate({
         where: {
-          email: row.email.toLowerCase()
+          email: row.email.toLowerCase(),
         },
         defaults: {
-          name: row.name,
+          name: row.name.toUpperCase(),
           rollno: row.rollno.toLowerCase(),
           email : row.email.toLowerCase()
         }

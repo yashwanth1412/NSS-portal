@@ -55,12 +55,12 @@ passport.use(new GoogleStrategy({
       await db_sequelize.sync()
       user = await User.findOrCreate({
         where: {
-          email: profile.emails[0].value
+          email: profile.emails[0].value.toLowerCase()
         },
         defaults: {
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          rollno: profile.emails[0].value.slice(0, index)
+          name: profile.displayName.toUpperCase(),
+          email: profile.emails[0].value.toLowerCase(),
+          rollno: profile.emails[0].value.slice(0, index).toLowerCase()
         }
       })
       done(null, user)
