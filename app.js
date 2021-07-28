@@ -92,7 +92,7 @@ app.get("/auth/google/index",
 
 app.use("/admin", AdminRouter)
 
-app.get("/", async(req, res)=> {
+app.get("/", async(req, res, next)=> {
   if(!req.isAuthenticated()){
     return res.redirect("/login")
   }
@@ -108,7 +108,7 @@ app.get("/", async(req, res)=> {
       return {...events.Event.dataValues, ...events.dataValues};
     })
   } catch(err) {
-    done(err, false)
+    next(err)
   }
 
   try {
@@ -118,7 +118,7 @@ app.get("/", async(req, res)=> {
     })
   } catch {
     err = new Error()
-    done(err, false)
+    next(err)
   }
 
   var sample = {};
@@ -137,6 +137,7 @@ app.get("/", async(req, res)=> {
       "category" : entry.fk_category
     }
   });
+  
   var agg_hrs = 0;
   a.forEach((data, i) => {
     agg_hrs += data.hours;

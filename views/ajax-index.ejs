@@ -1,0 +1,40 @@
+<div class="profile">
+    <div>Name: <%= info.name %></div>
+    <div>Mail: <%= info.mail %></div>
+</div>
+<div class="heading">Total Hours Completed: <%= info.hrs %> Hours</div>
+<div class="table-wrapper">
+    <h3>Events Attended</h3>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Event Date</th>
+            <th>Event Name</th>
+            <th>Hours Awarded</th>
+            <th>Category</th>
+            <th>Save</th>
+        </tr>
+        <% for(var i=0; i<list.length; i++){ %>
+            <tr>
+                <td><%= list[i].date %></td>
+                <td>
+                    <form id="form<%= i %>" action="/admin/update_hrs" method="POST">
+                        <input type="hidden" name="event_id" value="<%= list[i].id %>"/>
+                        <input type="hidden" name="email" value="<%= list[i].email %>" />
+                    </form>
+                    <%= list[i].name %>
+                </td>
+                <td><input form="form<%= i %>" type="number" name="hours" value="<%= list[i].hrs %>"/></td>
+                <td><%= list[i].category %></td>
+                <td><input form="form<%= i %>" type="submit" value="Save" class="btn btn-dark"/></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    input{
+        border: 0;
+    }
+</style>

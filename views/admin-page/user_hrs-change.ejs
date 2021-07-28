@@ -1,0 +1,35 @@
+<%- include('header') -%>
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <form id="form">
+    <div class="form-group">
+        <label class="form-label">Roll No: </label> 
+        <input type="text" name="rollno" class="form-control" required>
+    </div>
+    <input class="btn btn-dark" type="submit" value="Search">
+  </form>
+
+  <div id=user_details>
+
+  </div>
+
+  <script>
+      $("#form").on('submit', e => {
+          e.preventDefault()
+          
+          $.ajax({
+              method : "POST",
+              url : "/admin/change",
+              data: $("#form").serialize(),
+              dataType: 'html',
+              error: err => {
+                  console.log("server error occurred")
+              }
+          }).done(response => {
+              console.log(response)
+              document.getElementById("user_details").innerHTML = response
+          })
+      })
+  </script>
+
+<%- include('footer') -%>
