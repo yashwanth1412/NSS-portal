@@ -109,9 +109,15 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
       parser.pause();
 
       User.findOrCreate({
-        name: row.name,
-        rollno: row.rollno.toLowerCase(),
-        email : row.email.toLowerCase()
+        where: {
+          email: row.email.toLowerCase()
+        },
+        defaults: {
+          name: row.name,
+          rollno: row.rollno.toLowerCase(),
+          email : row.email.toLowerCase()
+        }
+        
       }).catch(err => {
         console.log(err)
         next(err)
