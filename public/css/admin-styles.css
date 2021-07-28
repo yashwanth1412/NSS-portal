@@ -74,3 +74,8 @@
     font-size: 0.2em;
   }
 }
+
+.page-container {
+  position: relative;
+  min-height: 78.5vh;
+}
