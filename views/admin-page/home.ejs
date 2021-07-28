@@ -1,8 +1,28 @@
 <%- include('header') -%>
-<h1>
-  Title
-</h1>
-<p>
-  My page
-</p>
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <div class="table-wrapper">
+    <h3>All Events</h3>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>Event Date</th>
+          <th>Event Name</th>
+          <th>Category</th>
+        </tr>
+        <% for(var i=0; i<events.length; i++){ %>
+          <tr>
+            <td><%= events[i].date %></td>
+            <td><%= events[i].name %></td>
+            <td><%= events[i].fk_category %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    var element = document.getElementById("home");
+    element.classList.add("active");
+  </script>
 <%- include('footer') -%>

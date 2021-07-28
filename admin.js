@@ -14,11 +14,23 @@ router = express.Router()
 
 router.use(check_admin)
 
-router.get("/", (req, res) => {
+router.get("/", async(req, res) => {
+  let events = await Event.findAll({
+    order: [
+      ['date', 'ASC'],
+      ['name', 'ASC']
+    ]
+  })
+  res.render("admin-page/home", {
+    events: events
+  })
+})
+
+router.get("/add_event", (req, res) => {
   res.render("admin-page/add_event")
 })
 
-router.post("/", upload.single("fileName"), async(req, res, next) => {
+router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
   try {
     if (req.file == undefined) {
       let err = new Error("Please upload a csv file");
@@ -32,7 +44,6 @@ router.post("/", upload.single("fileName"), async(req, res, next) => {
     })
     
     let path = __dirname + "/records/" + req.file.filename;
-    let csvData = [];
 
     var parser = await fs.createReadStream(path)
     .pipe(csv.parse({ headers: true }))
@@ -62,8 +73,60 @@ router.post("/", upload.single("fileName"), async(req, res, next) => {
   } 
   catch (err) {
     next(err)
-  }
-      
+  }    
+})
+
+router.get("/volunteers", async(req, res) => {
+  let users = await User.findAll({
+    order: [
+      ['name', 'ASC']
+    ]
+  })
+  res.render("admin-page/volunteers", {
+    users: users
+  })
+})
+
+router.get("/add_volunteers", (req, res) => {
+  res.render("admin-page/add_volunteers")
+})
+
+router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) => {
+  try {
+    if (req.file == undefined) {
+      let err = new Error("Please upload a csv file");
+      throw err;
+    }
+    
+    let path = __dirname + "/records/" + req.file.filename;
+
+    var parser = await fs.createReadStream(path)
+    .pipe(csv.parse({ headers: true }))
+    .on("error", (error) => {
+      throw error;
+    })
+    .on("data", async(row) => {
+      parser.pause();
+
+      User.findOrCreate({
+        name: row.name,
+        rollno: row.rollno.toLowerCase(),
+        email : row.email.toLowerCase()
+      }).catch(err => {
+        console.log(err)
+        next(err)
+      })
+
+      parser.resume();
+    })
+    .on("end", () => {
+      console.log("Done")
+    });
+    res.redirect('/admin/volunteers')
+  } 
+  catch (err) {
+    next(err)
+  } 
 })
 
 module.exports = router

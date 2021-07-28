@@ -1,0 +1,17 @@
+<%- include('header') -%>
+    <link rel="stylesheet" href="/css/add_event.css">
+
+    <form class="event_form" action="/admin/add_volunteers" method = "POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Add users file (.csv)</label>
+            <input class="form-control" type="file" id="formFile" accept = ".csv" name="fileName" required>
+        </div>
+
+        <div><input class="btn btn-dark" type="submit" value="Add Volunteers"></div>
+    </form>
+
+    <script>
+        var element = document.getElementById("add_volunteers");
+        element.classList.add("active");
+  </script>
+<%- include('footer') -%>

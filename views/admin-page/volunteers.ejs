@@ -1,0 +1,28 @@
+<%- include('header') -%>
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <div class="table-wrapper">
+    <h3>Volunteers</h3>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Roll No</th>
+        </tr>
+        <% for(var i=0; i<users.length; i++){ %>
+          <tr>
+            <td><%= users[i].name %></td>
+            <td><%= users[i].email %></td>
+            <td><%= users[i].rollno %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    var element = document.getElementById("volunteers");
+    element.classList.add("active");
+  </script>
+<%- include('footer') -%>

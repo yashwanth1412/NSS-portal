@@ -1,33 +1,42 @@
 <%- include('header') -%>
-<link rel="stylesheet" href="/css/add_event.css">
-<form class="event_form" action="/admin" method = "POST" enctype="multipart/form-data">
-    <div class="form-group">
-        <label class="form-label">Event Name: </label> 
-        <input type="text" name="event" class="form-control">
-    </div>
+    <link rel="stylesheet" href="/css/add_event.css">
 
-    <div class="form-group">
-        <label class="form-label">Date: </label> 
-        <input type="date" name="date" class="form-control"/>
-    </div>
-    
-    <div class="form-group">
-        <label for="category" class="form-label">Category:</label>
-        <select name="dropdown" class="form-control">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        </select>
-    </div>
+    <form class="event_form" action="/admin/add_event" method = "POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="form-label">Event Name: </label> 
+            <input type="text" name="event" class="form-control" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="formFile" class="form-label">Add records file (.csv)</label>
-        <input class="form-control" type="file" id="formFile" accept = ".csv" name="fileName">
-    </div>
+        <div class="form-group">
+            <label class="form-label">Date: </label> 
+            <input type="date" name="date" class="form-control" required/>
+        </div>
 
-    <div><input class="btn btn-dark" type="submit"></div>
-</form>
+        <div>
+            <label for="inputGroupSelect01" class="form-label">Category:</label>
+        </div>
+        
+        <div class="input-group mb-3">
+            <select class="custom-select" id="inputGroupSelect01" name="dropdown">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Add records file (.csv)</label>
+            <input class="form-control" type="file" id="formFile" accept = ".csv" name="fileName" required>
+        </div>
+
+        <div><input class="btn btn-dark" type="submit"></div>
+    </form>
+
+    <script>
+        var element = document.getElementById("add_event");
+        element.classList.add("active");
+  </script>
 <%- include('footer') -%>
