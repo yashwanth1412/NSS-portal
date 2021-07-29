@@ -14,7 +14,7 @@ router = express.Router()
 
 router.use(check_admin)
 
-router.get("/", async(req, res) => {
+router.get("/", async(req, res, next) => {
   let events = await Event.findAll({
     order: [
       ['date', 'ASC'],
@@ -35,6 +35,19 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
     if (req.file == undefined) {
       let err = new Error("Please upload a csv file");
       throw err;
+    }
+
+    var e = await Event.findOne({
+      where: {
+        name: req.body.event,
+        date: new Date(req.body.date)
+      }
+    })
+
+    if(e){
+      let err = new Error("A event with same name and date already exists")
+      err.statusCode = 409
+      throw err
     }
 
     var event = await Event.create({
@@ -61,7 +74,7 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
         console.log("uploaded")
       }).catch(err => {
         console.log(err)
-        next(err)
+        throw err
       })
 
       parser.resume();
