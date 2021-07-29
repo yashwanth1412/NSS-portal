@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs")
 const csv = require("fast-csv");
+const path = require("path")
 
 const User = require("../models/user.js")
 const Event = require("../models/event.js")
@@ -58,9 +59,9 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
       fk_category: req.body.dropdown
     })
     
-    let path = __dirname + "/records/" + req.file.filename;
+    let p = path.join(__dirname, "../records/") + req.file.filename;
 
-    var parser = await fs.createReadStream(path)
+    var parser = await fs.createReadStream(p)
     .pipe(csv.parse({ headers: true }))
     .on("error", (error) => {
       throw error;
@@ -115,11 +116,10 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
       throw err;
     }
     
-    let path = __dirname + "/records/" + req.file.filename;
+    let p = path.join(__dirname, "../records/") + req.file.filename;
+    console.log(p)
 
-    console.log(path)
-
-    var parser = await fs.createReadStream(path)
+    var parser = await fs.createReadStream(p)
     .pipe(csv.parse({ headers: true }))
     .on("error", (error) => {
       throw error;
