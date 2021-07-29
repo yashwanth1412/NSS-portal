@@ -20,9 +20,9 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* img {
-  width: 3%;
-} */
+img {
+  width: 5%;
+}
 
 .heading {
   padding: 1rem;
@@ -79,12 +79,20 @@ tr:hover {
 }
 
 @media screen and (max-width: 970px) {
+  img {
+    width: 7%;
+  }
+
   table {
     width: 75%;
   }
 }
 
 @media screen and (max-width: 925px) {
+  img {
+    width: 10%;
+  }
+
   table {
     width: 70%;
   }

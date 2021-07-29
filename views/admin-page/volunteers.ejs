@@ -7,12 +7,19 @@
           <th>Name</th>
           <th>Email</th>
           <th>Roll No</th>
+          <th>Remove</th>
         </tr>
         <% for(var i=0; i<users.length; i++){ %>
           <tr>
             <td><%= users[i].name %></td>
             <td><%= users[i].email %></td>
             <td><%= users[i].rollno %></td>
+            <td>
+              <form id="form<%= i %>" action="/admin/delete_user" method="POST">
+              <input type="hidden" name="email" value="<%= users[i].email %>"/>
+            </form>
+            <input form="form<%= i %>" type="submit" value="Remove" class="btn btn-danger"/>
+          </td>
           </tr>
         <% } %>
       </tbody>

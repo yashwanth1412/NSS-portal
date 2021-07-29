@@ -74,10 +74,7 @@ tr:hover {
 }
 
 /*Footer section*/
-.footer {/*
-  position: fixed;
-  bottom: 0;
-  width: 100%;*/
+.footer {
   padding: 5rem 3rem;
   background-color: rgb(0, 0, 128);
 }
@@ -129,7 +126,7 @@ tr:hover {
     display: block;
   }
 
-  td .btn {
+  td .btn, .home td:nth-of-type(4) {
     width: 100%;
   }
 
@@ -140,8 +137,13 @@ tr:hover {
   }
 
   tr {
+    width: 70%;
     border-bottom: 1px solid #aaa;
     border-collapse: collapse;
+  }
+
+  input[type="number"] {
+    text-align: left;
   }
 
   .table td {
@@ -150,6 +152,7 @@ tr:hover {
     position: relative;
     padding: 1rem 0rem 1rem 10rem;
     white-space: nowrap;
+    text-align: left;
   }
 
   td:before {
@@ -159,6 +162,8 @@ tr:hover {
     width: 45%;
     padding: 8px 15px;
     white-space: nowrap;
+    font-weight: bold;
+    text-align: left;
   }
 
   td:nth-of-type(1):before {
@@ -176,6 +181,10 @@ tr:hover {
 
   .home td:nth-of-type(3):before {
     content: "Category";
+  }
+
+  .home td:nth-of-type(4):before, .volunteers td:nth-of-type(4):before {
+    content: "";
   }
 
   .volunteers td:nth-of-type(1):before {

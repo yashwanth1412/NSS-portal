@@ -7,12 +7,19 @@
           <th>Event Date</th>
           <th>Event Name</th>
           <th>Category</th>
+          <th>Delete</th>
         </tr>
         <% for(var i=0; i<events.length; i++){ %>
           <tr>
             <td><%= events[i].date %></td>
             <td><%= events[i].name %></td>
             <td><%= events[i].fk_category %></td>
+          <td>
+            <form id="form<%= i %>" action="/admin/delete_event" method="POST">
+              <input type="hidden" name="event_id" value="<%= events[i].id %>"/>
+            </form>
+            <input form="form<%= i %>" type="submit" value="Delete" class="btn btn-danger"/>
+          </td>
           </tr>
         <% } %>
       </tbody>

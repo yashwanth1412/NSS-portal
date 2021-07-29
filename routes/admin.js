@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs")
 const csv = require("fast-csv");
+const path = require("path");
 
 const User = require("../models/user.js")
 const Event = require("../models/event.js")
@@ -58,17 +59,18 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
       fk_category: req.body.dropdown
     })
     
-    let path = __dirname + "/records/" + req.file.filename;
+    let reqPath = path.join(__dirname, '../')
+    let Path = reqPath + "/records/" + req.file.filename;
 
-    var parser = await fs.createReadStream(path)
-    .pipe(csv.parse({ headers: true }))
+    var parser = await fs.createReadStream(Path)
+    .pipe(csv.parse({ headers: true, delimiter: ',' }))
     .on("error", (error) => {
       throw error;
     })
     .on("data", async(row) => {
       parser.pause();
       
-      User_Events.create({
+      await User_Events.create({
         UserEmail: row.email,
         EventId: event.id,
         hours: row.hours
@@ -115,18 +117,20 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
       throw err;
     }
     
-    let path = __dirname + "/records/" + req.file.filename;
+    let reqPath = path.join(__dirname, '../')
+    let Path = reqPath + "/records/" + req.file.filename;
 
-    console.log(path)
+    console.log(Path)
 
-    var parser = await fs.createReadStream(path)
+    var parser = await fs.createReadStream(Path)
     .pipe(csv.parse({ headers: true }))
     .on("error", (error) => {
       throw error;
     })
     .on("data", async(row) => {
       parser.pause();
-      User.findOrCreate({
+      console.log(row.toString());
+      await User.findOrCreate({
         where: {
           email: row.email.toLowerCase(),
         },
@@ -228,6 +232,48 @@ router.post("/update_hrs", async(req, res) => {
 
   }
   res.redirect("/admin/user_search")
+})
+
+router.post("/delete_event", async(req, res) => {
+  console.log(req.body);
+  try {
+    await User_Events.destroy({
+      where: {
+        EventId: req.body.event_id
+      }
+    })
+
+    await Event.destroy({
+      where: {
+        id: req.body.event_id
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.redirect("/");
+})
+
+router.post("/delete_user", async(req, res) => {
+  console.log(req.body);
+  try {
+    await User_Events.destroy({
+      where: {
+        UserEmail: req.body.email
+      }
+    })
+
+    await User.destroy({
+      where: {
+        email: req.body.email
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.redirect("/volunteers");
 })
 
 module.exports = router
