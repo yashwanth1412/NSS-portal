@@ -32,7 +32,9 @@ router.get("/add_event", (req, res) => {
 
 router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
   try {
-    if (req.file == undefined) {
+    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+    var valid = regex.test(req.file.filename);
+    if (req.file == undefined || !valid) {
       let err = new Error("Please upload a csv file");
       throw err;
     }
@@ -106,7 +108,9 @@ router.get("/add_volunteers", (req, res) => {
 
 router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) => {
   try {
-    if (req.file == undefined) {
+    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv)$/;
+    var valid = regex.test(req.file.filename);
+    if (req.file == undefined || !valid) {
       let err = new Error("Please upload a csv file");
       throw err;
     }
