@@ -63,7 +63,7 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
     let Path = reqPath + "/records/" + req.file.filename;
 
     var parser = await fs.createReadStream(Path)
-    .pipe(csv.parse({ headers: true, delimiter: ',' }))
+    .pipe(csv.parse({ headers: true }))
     .on("error", (error) => {
       throw error;
     })
