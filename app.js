@@ -33,7 +33,6 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(async function(user, done) {
   email = user[0].email
-  await db_sequelize.sync()
   u = await User.findByPk(email)
   if(u)
     done(null, u)
