@@ -1,6 +1,4 @@
 const express = require("express");
-const fs = require("fs")
-const csv = require("fast-csv");
 const path = require("path");
 
 const User = require("../models/user.js")
@@ -10,10 +8,15 @@ const Category = require('../models/category.js');
 
 const check_admin = require("../middleware/check_admin.js");
 const upload = require("../middleware/file_upload.js");
+const flash_messages = require("../middleware/messages.js");
 
+const read_file = require("../utilities/read_file.js")
 router = express.Router()
 
 router.use(check_admin)
+router.use(flash_messages)
+
+
 
 router.get("/", async(req, res, next) => {
   let events = await Event.findAll({
@@ -52,51 +55,57 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
       err.statusCode = 409
       throw err
     }
+    
+    let reqPath = path.join(__dirname, '../')
+    let Path = reqPath + "/records/" + req.file.filename;
+
+    const arr = await read_file(Path, ['email', 'hours'])
+    
+    if(!arr.status){
+      req.session.message = {
+        type: "warning",
+        message: arr.message
+      };
+      return res.redirect('/admin/add_event');
+    }
 
     var event = await Event.create({
       name: req.body.event,
       date: new Date(req.body.date),
       fk_category: req.body.dropdown
+    }).catch(err =>{
+      throw err
     })
-    
-    let reqPath = path.join(__dirname, '../')
-    let Path = reqPath + "/records/" + req.file.filename;
 
-    var parser = await fs.createReadStream(Path)
-    .pipe(csv.parse({ headers: true }))
-    .on("error", (error) => {
-      throw error;
-    })
-    .on("data", async(row) => {
-      parser.pause();
-      console.log(row);
+    for(var i=0; i<arr.data.length; i++){
       await User_Events.create({
-        UserEmail: row.email,
+        UserEmail: arr.data[i].email,
         EventId: event.id,
-        hours: row.hours
-      }).then(user => {
-        console.log("uploaded")
+        hours: arr.data[i].hours
       }).catch(err => {
-        console.log(err)
         throw err
       })
-
-      parser.resume();
-    })
-    .on("end", () => {
-      console.log("Done")
-    });
-    res.redirect('/admin')
+    }
+    
+    req.session.message = {
+      type: "success",
+      message: "Successfully uploaded and saved csv file"
+    };
+    res.redirect('/admin');
   } 
   catch (err) {
-    next(err)
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    return res.redirect('/admin/add_event');
   }    
 })
 
 router.get("/volunteers", async(req, res) => {
   let users = await User.findAll({
     order: [
-      ['name', 'ASC']
+      ['email', 'ASC']
     ]
   })
   res.render("admin-page/volunteers", {
@@ -120,51 +129,44 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
     let reqPath = path.join(__dirname, '../')
     let Path = reqPath + "records/" + req.file.filename;
 
-    console.log(Path)
+    const arr = await read_file(Path, ["name", "rollno", "email"])
 
-    let headings = ["name", "rollno", "email"];
-    let flag = 0
+    if(!arr.status){
+      req.session.message = {
+        type: "warning",
+        message: arr.message
+      };
+      return res.redirect('/admin/add_volunteers');
+    }
 
-    var parser = await fs.createReadStream(Path)
-    .pipe(csv.parse({ headers: true }))
-    .on("error", (error) => {
-      throw error;
-    })
-    .on("data", async(row) => {
-      parser.pause();
-      if(flag === 0 && Object.keys(row).sort() !== headings.sort()){
-        flag = 1
-        let err = new Error("Incorrect column names.");
-        throw err;
-       }
-      else{
-        console.log(Object.keys(row).sort());
-        console.log(headings.sort());
-        await User.findOrCreate({
+    for(var i=0; i<arr.data.length; i++){
+      await User.findOrCreate({
           where: {
-            email: row.email.toLowerCase(),
+            email: arr.data[i].email.toLowerCase(),
           },
           defaults: {
-            name: row.name.toUpperCase(),
-            rollno: row.rollno.toLowerCase(),
-            email : row.email.toLowerCase()
+            name: arr.data[i].name.toUpperCase(),
+            rollno: arr.data[i].rollno.toLowerCase(),
+            email : arr.data[i].email.toLowerCase()
           }
-          
         }).catch(err => {
-          console.log(err)
-          next(err)
+          throw err
         })
+    }
 
-        parser.resume();
-      }
-    })
-    .on("end", () => {
-      console.log("Done")
-    });
-    res.redirect('/admin/volunteers')
+    req.session.message = {
+      type: "success",
+      message: "Successfully uploaded and saved csv file"
+    };
+    res.redirect('/admin/volunteers');
+    
   } 
   catch (err) {
-    next(err)
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    return res.redirect('/admin/add_volunteers');
   } 
 })
 
@@ -186,7 +188,7 @@ router.post('/user_search', async(req, res, next) => {
 
     var a = await User_Events.findAll({
       where: {
-        UserEmail: req.body.rollno.toLowerCase() + "@iiitr.ac.in"
+        UserEmail: user.email
       },
       include: Event
     })
@@ -219,15 +221,10 @@ router.post('/user_search', async(req, res, next) => {
     "hrs" : agg_hrs
   };
 
-  console.log(b)
-
-
   res.render("ajax-index", {list: b, info: info});
 })
 
 router.post("/update_hrs", async(req, res) => {
-  console.log("hello")
-  console.log(req.body)
   try{
     var p = await User_Events.findOne({
         where: {
@@ -237,16 +234,26 @@ router.post("/update_hrs", async(req, res) => {
       })
     await p.update({
       hours: req.body.hours
+    }).catch(err => {
+      throw err
     })
-  }
-  catch{
 
+    req.session.message = {
+      type: "success",
+      message: `Successfully updated hours for user whose email is: ${req.body.email}`
+    };
+    return res.redirect('/admin/user_search');
   }
-  res.redirect("/admin/user_search")
+  catch(err){
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    return res.redirect('/admin/user_search');
+  }
 })
 
 router.post("/delete_event", async(req, res) => {
-  console.log(req.body);
   try {
     await User_Events.destroy({
       where: {
@@ -258,16 +265,25 @@ router.post("/delete_event", async(req, res) => {
       where: {
         id: req.body.event_id
       }
+    }).catch((err) => {
+      throw err
     })
-  } catch (error) {
-    console.log(error);
-  }
 
-  res.redirect("/admin");
+    req.session.message = {
+      type: "success",
+      message: 'Successfully deleted event'
+    };
+    res.redirect('/admin');
+  } catch (error) {
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    res.redirect("/admin");
+  }
 })
 
 router.post("/delete_user", async(req, res) => {
-  console.log(req.body);
   try {
     await User_Events.destroy({
       where: {
@@ -279,12 +295,23 @@ router.post("/delete_user", async(req, res) => {
       where: {
         email: req.body.email
       }
+    }).catch(err => {
+      throw err
     })
-  } catch (error) {
-    console.log(error);
-  }
 
-  res.redirect("/admin/volunteers");
+    req.session.message = {
+      type: "success",
+      message: `Successfully deleted user whose email is ${req.body.email}`
+    };
+
+    res.redirect("/admin/volunteers");
+  } catch (error) {
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    res.redirect("/admin/volunteers");
+  }
 })
 
 module.exports = router
