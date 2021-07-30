@@ -118,7 +118,7 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
     }
     
     let reqPath = path.join(__dirname, '../')
-    let Path = reqPath + "/records/" + req.file.filename;
+    let Path = reqPath + "records/" + req.file.filename;
 
     console.log(Path)
 
@@ -134,8 +134,8 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
       parser.pause();
       if(flag === 0 && Object.keys(row).sort() !== headings.sort()){
         flag = 1
-        console.log("error here");
-        return;
+        let err = new Error("Incorrect column names.");
+        throw err;
        }
       else{
         console.log(Object.keys(row).sort());
@@ -263,7 +263,7 @@ router.post("/delete_event", async(req, res) => {
     console.log(error);
   }
 
-  res.redirect("/");
+  res.redirect("/admin");
 })
 
 router.post("/delete_user", async(req, res) => {
@@ -284,7 +284,7 @@ router.post("/delete_user", async(req, res) => {
     console.log(error);
   }
 
-  res.redirect("/volunteers");
+  res.redirect("/admin/volunteers");
 })
 
 module.exports = router
