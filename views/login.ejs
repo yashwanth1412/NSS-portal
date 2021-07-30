@@ -2,30 +2,62 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="css/home-styles.css">
+        <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,300&family=Montserrat:wght@100&family=Sacramento&display=swap"
+        rel="stylesheet"
+        />
+        <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <link
+        href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
+        rel="stylesheet"
+        id="bootstrap-css"
+        />
+        <link rel="stylesheet" href="css/login-styles.css">
         <title>Home</title>
     </head>
     <body>
-        <div class="container">
-            <div>
-                <form action="/login" method="POST">
-                    <div>
-                        <label>Email</label>
-                        <input type="text" name="username" required autofocus>
-                    </div>
-                    <div>
-                        <label>Password</label>
-                        <input type="password" name="password" required>
-                    </div>
-                    <div class="login-btns">
-                        <button type="submit">Login</button>
-                        <button><a href="/register">Register</a></button>
-                    </div>
-                </form>
-                <a href="/auth/google" role='button'>
-                    <img src="images/google-sign-btn.png" alt="Google sign in">
-                </a>
+        <div class="flex-container">
+            <img class="logo-in-img" src="/images/iiitr.png" height="70" alt="" />
+        
+            <h2 class="logo-in">IIIT Raichur NSS Portal</h2>
+        
+            <img class="logo-in-img" src="/images/nss.png" height="70" alt="" />
+    
+        </div>
+        <div class="bg-image">
+            <div class="container">
+              <div
+                class="card text-center card-transparent"
+                style="width: 40rem; height: 30rem;"
+              >
+                <div class="card-body" style="color: white;">
+                  <i class="material-icons" style="font-size: 5rem; color: red;">
+                    watch_later
+                  </i>
+      
+                  <h2 class="card-title">Login to Hours portal</h2>
+      
+                  <h3 class="card-text">
+                    Sign in with your college mailId to view your contributions in
+                    NSS.
+                  </h3>
+                  <br />
+                  <a href="/auth/google">
+                    <button class="btn" style="background-color: red; color: white;">
+                    Login with Google
+                    </button>
+                  </a>
+                </div>
+              </div>
             </div>
-        </div>  
+          </div>
+          <div class="footer">
+            <div>Copyright © 2021 NSS IIIT Raichur. All Rights Reserved.</div>
+          </div>
     </body>
 </html>
