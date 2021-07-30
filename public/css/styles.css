@@ -24,6 +24,26 @@ img {
   width: 5%;
 }
 
+.navigation {
+  padding: 0.5rem;
+  background-color: #00001f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navigation a {
+  padding: 0.5rem;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 1px;
+  border-radius: 5px;
+}
+
+.navigation a:hover {
+  background-color: rgb(204, 59, 59);
+}
+
 .heading {
   padding: 1rem;
   display: flex;
@@ -31,7 +51,6 @@ img {
 }
 
 .profile {
-  /*padding: 1rem;*/
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -100,6 +119,10 @@ tr:hover {
 @media screen and (max-width: 771px) {
   img {
     width: 12%;
+  }
+
+  .events tr {
+    width: 90%;
   }
 
   th,
@@ -183,6 +206,10 @@ tr:hover {
   td {
     padding-left: 12rem;
   }
+
+  .events tr {
+    width: 90%;
+  } 
 
   .profile {
     flex-direction: column;

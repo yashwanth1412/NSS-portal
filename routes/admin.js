@@ -69,7 +69,7 @@ router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
     })
     .on("data", async(row) => {
       parser.pause();
-      
+      console.log(row);
       await User_Events.create({
         UserEmail: row.email,
         EventId: event.id,
@@ -122,6 +122,9 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
 
     console.log(Path)
 
+    let headings = ["name", "rollno", "email"];
+    let flag = 0
+
     var parser = await fs.createReadStream(Path)
     .pipe(csv.parse({ headers: true }))
     .on("error", (error) => {
@@ -129,23 +132,31 @@ router.post("/add_volunteers", upload.single("fileName"), async(req, res, next) 
     })
     .on("data", async(row) => {
       parser.pause();
-      console.log(row.toString());
-      await User.findOrCreate({
-        where: {
-          email: row.email.toLowerCase(),
-        },
-        defaults: {
-          name: row.name.toUpperCase(),
-          rollno: row.rollno.toLowerCase(),
-          email : row.email.toLowerCase()
-        }
-        
-      }).catch(err => {
-        console.log(err)
-        next(err)
-      })
+      if(flag === 0 && Object.keys(row).sort() !== headings.sort()){
+        flag = 1
+        console.log("error here");
+        return;
+       }
+      else{
+        console.log(Object.keys(row).sort());
+        console.log(headings.sort());
+        await User.findOrCreate({
+          where: {
+            email: row.email.toLowerCase(),
+          },
+          defaults: {
+            name: row.name.toUpperCase(),
+            rollno: row.rollno.toLowerCase(),
+            email : row.email.toLowerCase()
+          }
+          
+        }).catch(err => {
+          console.log(err)
+          next(err)
+        })
 
-      parser.resume();
+        parser.resume();
+      }
     })
     .on("end", () => {
       console.log("Done")
