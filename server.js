@@ -3,6 +3,8 @@ const path = require("path");
 
 const app = require('./app.js')
 
-app.listen(process.env.PORT || 3000, function(){
-  console.log("Server started at port 3000");
+const PORT = 3000;
+
+app.listen(process.env.PORT || PORT, function(){
+  console.log(`Server started at port ${PORT}`);
 });
