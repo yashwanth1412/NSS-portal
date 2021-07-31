@@ -3,7 +3,7 @@ function check_user(req, res, next){
         return res.redirect("/login")
     try{
         email = req.user.email
-        if(email == process.env.Admin){
+        if(email == process.env.ADMIN){
             return res.redirect("/admin")
         }
         else
