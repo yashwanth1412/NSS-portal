@@ -8,6 +8,7 @@
         href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,300&family=Montserrat:wght@100&family=Sacramento&display=swap"
         rel="stylesheet"
       />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <link rel="stylesheet" href="/css/admin-styles.css" />
@@ -22,7 +23,7 @@
           <img class="logo-in" src="/images/nss.png" height="70" alt="NSS Logo" />
         </div>
 
-        <div class="topnav">
+        <div class="topnav" id="myTopnav">
           <a href="/admin" id=home>Home</a>
           <a href="/admin/add_event" id=add_event>Add Event</a>
           <a href="/admin/volunteers" id="volunteers">Volunteers</a>
@@ -30,6 +31,9 @@
           <a href="/admin/user_search" id="update_hrs">Update hours</a>
           <a href="/admin/add_category" id="add_category">Add Category</a>
           <a href="/logout">Logout</a>
+          <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+        </a>
         </div>
 
         <% if(message) { %>
@@ -44,4 +48,13 @@
           document.addEventListener('DOMContentLoaded', () => {
             $('.alert').alert()
           })
+          function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+              x.className += " responsive";
+            } else {
+              x.className = "topnav";
+            }
+          }
+
         </script>
