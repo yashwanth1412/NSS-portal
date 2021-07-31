@@ -32,8 +32,15 @@ router.get("/", async(req, res, next) => {
 
 router.get("/add_event", async(req, res) => {
   var cat = await Category.findAll()
+  if(cat.length == 0){
+    req.session.message = {
+      type: "warning",
+      message: "Please add Category before inserting.."
+    };
+    res.redirect("/admin/add_category")
+  }
   res.render("admin-page/add_event", {
-    num: cat.length
+    category: cat
   })
 })
 
