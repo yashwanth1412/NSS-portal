@@ -1,6 +1,10 @@
 <%- include('header') -%>
     <form class="event_form" action="/admin/add_category" method = "POST">
         <div class="form-group">
+            <label class="form-label">Number: </label> 
+            <input class="form-control" type="number" name="number" min="1" value="0" id="hrs" required>
+        </div>
+        <div class="form-group">
             <label class="form-label">Min Hours: </label> 
             <input class="form-control" type="number" name="hours" min="0" value="0" id="hrs" required>
         </div>

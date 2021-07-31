@@ -331,7 +331,9 @@ router.get("/add_category", (req, res) => {
 router.post("/add_category", async(req, res) => {
   try{
     let hrs = req.body.hours
+    let num = req.body.number
     await Category.create({
+      number: num,
       minHrs: hrs
     }).catch(err => {
       throw err
