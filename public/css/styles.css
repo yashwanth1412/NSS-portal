@@ -25,7 +25,7 @@ img {
 }
 
 .navigation {
-  padding: 0.5rem;
+  /*padding: 0.5rem;*/
   background-color: #00001f;
   display: flex;
   justify-content: space-between;
@@ -33,15 +33,20 @@ img {
 }
 
 .navigation a {
-  padding: 0.5rem;
+  padding: 1rem;
   color: white;
   text-decoration: none;
   letter-spacing: 1px;
   border-radius: 5px;
 }
 
+.navigation a.active {
+  background-color: white;
+}
+
 .navigation a:hover {
-  background-color: rgb(204, 59, 59);
+  background-color: #ddd;
+  color: black;
 }
 
 .heading {

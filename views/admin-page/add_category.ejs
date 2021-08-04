@@ -1,0 +1,18 @@
+<%- include('header') -%>
+    <form class="event_form" action="/admin/add_category" method = "POST">
+        <div class="form-group">
+            <label class="form-label">Min Hours: </label> 
+            <input class="form-control" type="number" name="hours" min="0" value="0" id="hrs" required>
+        </div>
+        <input class="btn btn-dark" type="submit" value="Add Category">
+    </form>
+    <script>
+        var element = document.getElementById("add_category");
+        element.classList.add("active");
+    </script>
+    <style>
+        #hrs{
+            width: 20%;
+        }
+    </style>
+<%- include('footer') -%>

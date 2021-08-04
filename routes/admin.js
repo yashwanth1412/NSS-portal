@@ -30,8 +30,18 @@ router.get("/", async(req, res, next) => {
   })
 })
 
-router.get("/add_event", (req, res) => {
-  res.render("admin-page/add_event")
+router.get("/add_event", async(req, res) => {
+  var cat = await Category.findAll()
+  if(cat.length == 0){
+    req.session.message = {
+      type: "warning",
+      message: "Please add Category before inserting.."
+    };
+    res.redirect("/admin/add_category")
+  }
+  res.render("admin-page/add_event", {
+    category: cat
+  })
 })
 
 router.post("/add_event", upload.single("fileName"), async(req, res, next) => {
@@ -311,6 +321,33 @@ router.post("/delete_user", async(req, res) => {
       message: err.message
     }
     res.redirect("/admin/volunteers");
+  }
+})
+
+router.get("/add_category", (req, res) => {
+  res.render("admin-page/add_category")
+})
+
+router.post("/add_category", async(req, res) => {
+  try{
+    let hrs = req.body.hours
+    await Category.create({
+      minHrs: hrs
+    }).catch(err => {
+      throw err
+    })
+    req.session.message = {
+      type: "success",
+      message: "Successfully added a category"
+    }
+    res.redirect("/admin/add_category");
+  }
+  catch(err){
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    res.redirect("/admin/add_category");
   }
 })
 

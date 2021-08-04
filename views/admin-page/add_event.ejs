@@ -16,12 +16,9 @@
         
         <div class="input-group mb-3">
             <select class="custom-select" id="inputGroupSelect01" name="dropdown">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
+            <% for(var i=0; i<category.length; i++) { %>
+                <option value="<%= category[i].number %>"><%= category[i].number %></option>
+            <% } %>
             </select>
         </div>
 
