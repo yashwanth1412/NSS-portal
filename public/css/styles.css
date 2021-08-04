@@ -209,7 +209,7 @@ tr:hover {
 
 @media screen and (max-width: 681px) {
   td {
-    padding-left: 9rem;
+    padding-left: 10rem;
     white-space: pre-wrap ;
   }
 
