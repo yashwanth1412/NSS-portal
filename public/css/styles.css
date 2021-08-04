@@ -209,11 +209,12 @@ tr:hover {
 
 @media screen and (max-width: 681px) {
   td {
-    padding-left: 12rem;
+    padding-left: 9rem;
+    white-space: pre-wrap ;
   }
 
   .events tr {
-    width: 90%;
+    width: 100%;
   } 
 
   .profile {
