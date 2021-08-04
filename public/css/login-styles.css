@@ -23,6 +23,12 @@
     padding: 0.8rem;
   }
 
+  .pagetitle {
+    margin-top: 10px;
+    margin-bottom: 3px;
+    font-family: "MontSerrat", serif;
+    font-weight: bold;
+  }
   .logo h1 {
     size: 100rem;
 
@@ -95,6 +101,8 @@
     /* height: 50%; */
     /* border: 3px solid grey; */
     padding: 10px;
+    width: 40rem;
+  height: 30rem;
   }
 
   .btn {
@@ -130,11 +138,49 @@
   .flex-container {
     background-color: white;
     display: flex;
-
+    overflow: hidden;
     justify-content: space-evenly;
     align-items: center;
   }
 
+  .clgname {
+  padding-right: 15px;
+}
+
+
+@media screen and (max-width: 600px) {
+  .card {
+    width: 28rem;
+  }
+  .card-text {
+    font-size: 1.3em;
+  }
+  .card-title {
+    font-size: 1.7em;
+  }
+  .bg-image {
+    height: 600px;
+
+    width: 100%;
+  }
+  .footer {
+    padding: 4rem 2rem;
+  }
+}
+.logo-in {
+  display: inline-flex;
+}
+
+@media screen and (max-width: 506px) {
+  .logo-in {
+    text-align: center;
+    letter-spacing: 0.75;
+    display: block;
+  }
+  .clgname {
+    padding: 0;
+  }
+}
   /* @media screen and (max-width: 500px) {
     img {
       height: 15;
