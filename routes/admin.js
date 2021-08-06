@@ -237,7 +237,7 @@ router.post('/user_search', async(req, res, next) => {
       }
     }
     if(bool){
-      c.push(events);
+      c.push(allEvents[j]);
     }
   }
 
