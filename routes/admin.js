@@ -226,6 +226,21 @@ router.post('/user_search', async(req, res, next) => {
       "email" : entry.UserEmail
     }
   });
+
+  var c = []
+
+  for (const j in allEvents) {
+    var bool = true;
+    for (const i in b) {
+      if (allEvents[j].id === b[i].id) {
+        bool =  false;
+      }
+    }
+    if(bool){
+      c.push(events);
+    }
+  }
+
   var agg_hrs = 0;
   a.forEach((data, i) => {
     agg_hrs += data.hours;
@@ -238,7 +253,7 @@ router.post('/user_search', async(req, res, next) => {
     "hrs" : agg_hrs
   };
 
-  res.render("ajax-index", {list: b, info: info, events: allEvents});
+  res.render("ajax-index", {list: b, info: info, events: c});
 })
 
 router.post("/update_hrs", async(req, res) => {
