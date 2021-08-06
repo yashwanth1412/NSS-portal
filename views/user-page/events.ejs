@@ -1,0 +1,23 @@
+<%- include('header') -%>
+    <div class="container">
+      <div class="table-wrapper">
+        <h3>Events Organised</h3>
+        <table class="events">
+          <tbody>
+            <tr>
+              <th>Event Date</th>
+              <th>Event Name</th>
+              <th>Category</th>
+            </tr>
+            <% for(var i=0; i<list.length; i++){ %>
+              <tr>
+                <td><%= list[i].date %></td>
+                <td><%= list[i].name %></td>
+                <td><%= list[i].fk_category %></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+<%- include('footer') -%>
