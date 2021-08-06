@@ -362,16 +362,27 @@ router.post("/add_category", async(req, res) => {
 
 router.post("/add_user_event", async(req, res) => {
   console.log(req.body);
-
-  await User_Events.create({
-    UserEmail: req.body.email,
-    EventId: req.body.eventId,
-    hours: req.body.hrs
-  }).catch(err => {
-    throw err
-  })
-
-  res.redirect("/admin/user_search");
+  try{
+    await User_Events.create({
+      UserEmail: req.body.email,
+      EventId: req.body.eventId,
+      hours: req.body.hrs
+    }).catch(err => {
+      throw err
+    })
+    req.session.message = {
+      type: "success",
+      message: "Successfully added a event"
+    }
+    return res.redirect("/admin/user_search");
+  }
+  catch(err){
+    req.session.message = {
+      type: "danger",
+      message: err.message
+    }
+    res.redirect("/admin/add_category");
+  }
 })
 
 module.exports = router
