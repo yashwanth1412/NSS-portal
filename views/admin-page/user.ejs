@@ -1,3 +1,4 @@
+<%- include('header') -%>
 <div class="profile">
     <div>Name: <%= info.name %></div>
     <div>Mail: <%= info.mail %></div>
@@ -48,7 +49,7 @@
         </div>
         <div class="form-group">
             <label>Enter Hours: </label>
-            <input type="number" name="hrs" class="form-control" min="0"/>
+            <input type="number" name="hrs" class="form-control" min="0" required/>
         </div>
         <input type="submit" value="Save" class="btn btn-dark"/>
     </form>
@@ -64,5 +65,15 @@
         margin: 1rem auto;
         width: 50%;
     }
-
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        $("#user_event_form").css("display", "none")
+    })
+    $('#user_event').on('click', (e) => {
+        $("#user_event_form").css("display", "block")
+        $("#user_event").css("display", "none")
+    })
+</script>
+<%- include('footer') -%>

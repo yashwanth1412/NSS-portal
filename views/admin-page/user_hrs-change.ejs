@@ -1,8 +1,8 @@
 <%- include('header') -%>
-  <form id="form" class="event_form">
+  <form id="form" class="event_form" method="POST">
     <div class="form-group">
         <label class="form-label">Roll No: </label> 
-        <input type="text" name="rollno" class="form-control" required>
+        <input type="text" name="rollno" class="form-control" required autofocus>
     </div>
     <input class="btn btn-dark" type="submit" value="Search">
   </form>
@@ -14,21 +14,6 @@
   <script>
       var element = document.getElementById("update_hrs");
         element.classList.add("active");
-      $("#form").on('submit', e => {
-          e.preventDefault()
-          
-          $.ajax({
-              method : "POST",
-              url : "/admin/user_search",
-              data: $("#form").serialize(),
-              dataType: 'html',
-              error: err => {
-                  console.log("server error occurred")
-              }
-          }).done(response => {
-              document.getElementById("user_details").innerHTML = response
-          })
-      })
   </script>
 
 <%- include('footer') -%>

@@ -11,7 +11,6 @@ const upload = require("../middleware/file_upload.js");
 const flash_messages = require("../middleware/messages.js");
 
 const read_file = require("../utilities/read_file.js");
-//const { router } = require("../app.js");
 const router = express.Router();
 
 router.use(check_admin)
@@ -185,11 +184,15 @@ router.get("/user_search", async(req, res) => {
   res.render("admin-page/user_hrs-change")
 })
 
-router.post('/user_search', async(req, res, next) => {
+router.post('/user_search', (req, res, next) => {
+  res.redirect("/admin/user/" + req.body.rollno.toLowerCase())
+})
+
+router.get("/user/:rollno", async(req, res) => {
   try {
     var user = await User.findOne({
       where: {
-        rollno: req.body.rollno.toLowerCase()
+        rollno: req.params.rollno
       }
     })
 
@@ -253,11 +256,16 @@ router.post('/user_search', async(req, res, next) => {
     "hrs" : agg_hrs
   };
 
-  res.render("ajax-index", {list: b, info: info, events: c});
+  return res.render("admin-page/user", {list: b, info: info, events: c});
 })
 
 router.post("/update_hrs", async(req, res) => {
   try{
+    var user = await User.findOne({
+      where:{
+        email: req.body.email
+      }
+    })
     var p = await User_Events.findOne({
         where: {
           UserEmail : req.body.email,
@@ -272,16 +280,16 @@ router.post("/update_hrs", async(req, res) => {
 
     req.session.message = {
       type: "success",
-      message: `Successfully updated hours for user whose email is: ${req.body.email}`
+      message: `Successfully updated hours for ${user.name}`
     };
-    return res.redirect('/admin/user_search');
+    return res.redirect('/admin/user/' + user.rollno);
   }
   catch(err){
     req.session.message = {
       type: "danger",
       message: err.message
     }
-    return res.redirect('/admin/user_search');
+    return res.redirect('/admin/user/' + user.rollno);
   }
 })
 
@@ -378,6 +386,11 @@ router.post("/add_category", async(req, res) => {
 router.post("/add_user_event", async(req, res) => {
   console.log(req.body);
   try{
+    var user = await User.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
     await User_Events.create({
       UserEmail: req.body.email,
       EventId: req.body.eventId,
@@ -387,16 +400,16 @@ router.post("/add_user_event", async(req, res) => {
     })
     req.session.message = {
       type: "success",
-      message: "Successfully added a event"
+      message: `Successfully added event to ${user.name}` 
     }
-    return res.redirect("/admin/user_search");
+    return res.redirect("/admin/user/" + user.rollno);
   }
   catch(err){
     req.session.message = {
       type: "danger",
       message: err.message
     }
-    res.redirect("/admin/add_category");
+    res.redirect("/admin/user/" + user.rollno);
   }
 })
 
