@@ -54,6 +54,7 @@
   .topnav a:hover {
     background-color: #ddd;
     text-decoration: none;
+    color: black;
   }
 
   /* Add a color to the active/current link */
