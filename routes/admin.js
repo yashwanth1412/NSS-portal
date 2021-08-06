@@ -10,8 +10,9 @@ const check_admin = require("../middleware/check_admin.js");
 const upload = require("../middleware/file_upload.js");
 const flash_messages = require("../middleware/messages.js");
 
-const read_file = require("../utilities/read_file.js")
-router = express.Router()
+const read_file = require("../utilities/read_file.js");
+//const { router } = require("../app.js");
+const router = express.Router();
 
 router.use(check_admin)
 router.use(flash_messages)
@@ -196,6 +197,12 @@ router.post('/user_search', async(req, res, next) => {
       return res.send(`<h1>No user with Roll no ${req.body.rollno} exists!</h1>`)
     }
 
+    var allEvents = await Event.findAll();
+
+    allEvents = allEvents.map(events => {
+      return events.dataValues;
+    })
+
     var a = await User_Events.findAll({
       where: {
         UserEmail: user.email
@@ -231,7 +238,7 @@ router.post('/user_search', async(req, res, next) => {
     "hrs" : agg_hrs
   };
 
-  res.render("ajax-index", {list: b, info: info});
+  res.render("ajax-index", {list: b, info: info, events: allEvents});
 })
 
 router.post("/update_hrs", async(req, res) => {
@@ -351,6 +358,20 @@ router.post("/add_category", async(req, res) => {
     }
     res.redirect("/admin/add_category");
   }
+})
+
+router.post("/add_user_event", async(req, res) => {
+  console.log(req.body);
+
+  await User_Events.create({
+    UserEmail: req.body.email,
+    EventId: req.body.eventId,
+    hours: req.body.hrs
+  }).catch(err => {
+    throw err
+  })
+
+  res.redirect("/admin/user_search");
 })
 
 module.exports = router

@@ -33,8 +33,39 @@
     </table>
 </div>
 
+<div class="center_div"><button class="btn btn-dark" id="user_event">Add Event</button></div>
+<div id="user_event_form">
+    <form class="event_form" action="/admin/add_user_event" method="POST">
+        <input type="hidden" name="email" value="<%= info.mail%>" />
+        <div class="form-group">
+            <label>Event: </label>
+            <select class="custom-select" id="inputGroupSelect01" name="eventId">
+                <% for(var i=0; i<events.length; i++) { %>
+                    <option value="<%= events[i].id %>"><%= events[i].name %>, <%= events[i].date %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Enter Hours: </label>
+            <input type="number" name="hrs" class="form-control" min="0"/>
+        </div>
+        <input type="submit" value="Save" class="btn btn-dark"/>
+    </form>
+</div>
+
+
 <style>
     input{
         border: 0;
     }
+    .center_div{
+        text-align: center;
+        margin: 1rem auto;
+        width: 50%;
+    }
+
 </style>
+
+<script>
+    document.getElementById("user_event_form").style.display = "none";
+</script>
