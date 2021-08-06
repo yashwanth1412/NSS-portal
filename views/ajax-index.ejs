@@ -33,6 +33,7 @@
     </table>
 </div>
 
+<% if(events.length !== 0) { %>
 <div class="center_div"><button class="btn btn-dark" id="user_event">Add Event</button></div>
 <div id="user_event_form">
     <form class="event_form" action="/admin/add_user_event" method="POST">
@@ -52,7 +53,7 @@
         <input type="submit" value="Save" class="btn btn-dark"/>
     </form>
 </div>
-
+<% } %>
 
 <style>
     input{
