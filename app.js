@@ -6,6 +6,7 @@ const session = require("express-session");
 const path = require('path')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const app = express();
+const Event = require("./models/event.js");
 
 const UserRouter = require("./routes/user.js")
 const AdminRouter = require("./routes/admin.js")
@@ -92,7 +93,7 @@ app.get("/login", (req, res) => {
     res.redirect("/")
   }
   else{
-    res.render("login")
+    res.render("user-page/login")
   }
 })
 
@@ -102,6 +103,19 @@ app.get('/logout', function(req, res){
   res.redirect('/login');
 });
 
+app.get('/events', async function(req, res, next){
+  try {
+    var eventsList = await Event.findAll();
+
+    eventsList = eventsList.map(events => {
+      return events.dataValues;
+    })
+
+  } catch (error) {
+    next(error)
+  }
+  res.render("user-page/events", {list: eventsList});
+})
 
 app.use("/admin", AdminRouter)
 app.use("/", UserRouter)

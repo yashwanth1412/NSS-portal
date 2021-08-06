@@ -70,7 +70,7 @@ router.get("/", async(req, res, next)=> {
         "hrs" : agg_hrs
     };
 
-    res.render("index", {list: b, info: info, cwhrs: sample});
+    res.render("user-page/index", {list: b, info: info, cwhrs: sample});
 })
 
 module.exports = router
