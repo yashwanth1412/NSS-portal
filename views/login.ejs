@@ -20,6 +20,8 @@
         id="bootstrap-css"
         />
         <link rel="stylesheet" href="css/login-styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <title>Home</title>
     </head>
     <body>
@@ -34,6 +36,14 @@
             <img class="logo-in-img" src="/images/nss.png" height="70" alt="" />
 
         </div>
+        <div class="topnav" id="myTopnav">
+          <a class="active" href="#home">Home</a>
+          <a href="#event">Events</a>
+          <a href="#studentpage">Students</a>
+          <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+          </a>
+   </div>
         <div class="bg-image">
             <div class="container">
               <div
@@ -65,4 +75,18 @@
             <div>Copyright © 2021 NSS IIIT Raichur. All Rights Reserved.</div>
           </div>
     </body>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        $('.alert').alert()
+      })
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+
+    </script>
 </html>
