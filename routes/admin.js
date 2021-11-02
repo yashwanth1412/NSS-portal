@@ -384,7 +384,6 @@ router.post("/add_category", async(req, res) => {
 })
 
 router.post("/add_user_event", async(req, res) => {
-  console.log(req.body);
   try{
     var user = await User.findOne({
       where: {

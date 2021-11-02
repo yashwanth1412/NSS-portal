@@ -98,7 +98,6 @@ app.get("/login", (req, res) => {
 })
 
 app.get('/logout', function(req, res){
-  console.log('logging out');
   req.logout();
   res.redirect('/login');
 });
